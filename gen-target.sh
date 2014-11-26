@@ -5,7 +5,7 @@ if [ ! -f "psp.json.in" ]; then
     exit 2
 fi
 
-if [ ! command -v psp-config >/dev/null 2>&1 ]; then
+if ! command -v psp-config >/dev/null 2>&1; then
     echo "'psp-config' must be in your path." >&2
     exit 3
 fi
