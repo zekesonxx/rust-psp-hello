@@ -3,6 +3,8 @@
 #![feature(intrinsics, lang_items, linkage, macro_rules)]
 #![allow(dead_code)]
 
+use ctrl::Button;
+
 mod libc;
 mod lang;
 #[macro_escape]
@@ -32,22 +34,17 @@ pub extern "C" fn main() {
         if last_pad != pad_data.buttons {
             last_pad = pad_data.buttons;
 
-            if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_CROSS) {
-                utils::debug_print("X pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_CIRCLE) {
-                utils::debug_print("O pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_TRIANGLE) {
-                utils::debug_print("TRIANGLE pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_SQUARE) {
-                utils::debug_print("SQUARE pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_UP) {
-                utils::debug_print("UP pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_DOWN) {
-                utils::debug_print("DOWN pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_LEFT) {
-                utils::debug_print("LEFT pressed\n");
-            } else if ctrl::button_pressed(&pad_data, ctrl::Button::PSP_CTRL_RIGHT) {
-                utils::debug_print("RIGHT pressed\n");
+            match ctrl::pressed_key(&mut pad_data) {
+                Button::Cross => utils::debug_print("X pressed\n"),
+                Button::Circle => utils::debug_print("O pressed\n"),
+                Button::Triangle => utils::debug_print("TRIANGLE pressed\n"),
+                Button::Square => utils::debug_print("SQUARE pressed\n"),
+                Button::Up => utils::debug_print("UP pressed\n"),
+                Button::Down => utils::debug_print("DOWN pressed\n"),
+                Button::Left => utils::debug_print("LEFT pressed\n"),
+                Button::Right => utils::debug_print("RIGHT pressed\n"),
+                Button::None => (),
+                _ => utils::debug_print("unhandled keypress\n"),
             }
         }
         // ...
