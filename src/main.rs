@@ -3,6 +3,7 @@
 #![feature(intrinsics, lang_items, linkage, macro_rules)]
 #![allow(dead_code)]
 
+mod libc;
 mod lang;
 #[macro_escape]
 mod raw;
@@ -14,7 +15,6 @@ const VERSION_MAJOR: u8 = 0;
 const VERSION_MINOR: u8 = 1;
 
 PSP_MODULE_INFO!(raw::Mode::USER, VERSION_MAJOR, VERSION_MINOR)
-
 
 #[no_mangle]
 pub extern "C" fn main() {

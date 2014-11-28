@@ -1,6 +1,10 @@
+use libc::c_int;
+
 #[link(name = "pspdisplay")]
+#[allow(improper_ctypes)]
 extern {
-    fn sceDisplayWaitVblankStart() -> int;
+    fn sceDisplayWaitVblankStart() -> c_int;
+    fn sceDisplayWaitVblank() -> c_int;
 }
 
 // Wait for vertical blank start

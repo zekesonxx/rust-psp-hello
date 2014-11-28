@@ -1,3 +1,5 @@
+use libc::c_int;
+
 #[repr(C)]
 pub struct SceCtrlData {
     time_stamp: u32,
@@ -53,25 +55,26 @@ pub mod Button {
 }
 
 #[link(name = "pspctrl")]
+#[allow(improper_ctypes)]
 extern {
-    fn sceCtrlSetSamplingCycle(cycle: int) -> int;
-    fn sceCtrlGetSamplingCycle(cycle: &mut int) -> int;
-    fn sceCtrlSetSamplingMode(mode: int) -> int;
-    fn sceCtrlGetSamplingMode(cycle: &mut int) -> int;
+    fn sceCtrlSetSamplingCycle(cycle: c_int) -> c_int;
+    fn sceCtrlGetSamplingCycle(cycle: &mut c_int) -> c_int;
+    fn sceCtrlSetSamplingMode(mode: c_int) -> c_int;
+    fn sceCtrlGetSamplingMode(cycle: &mut c_int) -> c_int;
 
     fn sceCtrlPeekBufferPositive(pad_data: &mut SceCtrlData,
-                                 count: int) -> int;
+                                 count: c_int) -> c_int;
     fn sceCtrlPeekBufferNegative(pad_data: &mut SceCtrlData,
-                                 count: int) -> int;
+                                 count: c_int) -> c_int;
 
     fn sceCtrlReadBufferPositive(pad_data: &mut SceCtrlData,
-                                 count: int) -> int;
+                                 count: c_int) -> c_int;
 
     fn sceCtrlReadBufferNegative(pad_data: &mut SceCtrlData,
-                                 count: int) -> int;
+                                 count: c_int) -> c_int;
 
-    fn sceCtrlPeekLatch(latch_data: &mut SceCtrlLatch) -> int;
-    fn sceCtrlReadLatch(latch_data: &mut SceCtrlLatch) -> int;
+    fn sceCtrlPeekLatch(latch_data: &mut SceCtrlLatch) -> c_int;
+    fn sceCtrlReadLatch(latch_data: &mut SceCtrlLatch) -> c_int;
 }
 
 pub fn read(pad_data: &mut SceCtrlData) -> u32 {
