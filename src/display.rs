@@ -11,3 +11,8 @@ extern {
 pub fn wait_vblank_start() -> i32 {
     unsafe { sceDisplayWaitVblankStart() as i32 }
 }
+
+// Wait for vertical blank
+pub fn wait_vblank() -> i32 {
+    unsafe { sceDisplayWaitVblank() as i32 }
+}
