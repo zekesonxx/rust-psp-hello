@@ -119,53 +119,34 @@ macro_rules! if_pressed(
     )
 )
 
-pub fn pressed_key(pad_data: &SceCtrlData) -> Button {
-    if_pressed!(pad_data, button::PSP_CTRL_START, Button::Start)
-    if_pressed!(pad_data, button::PSP_CTRL_UP, Button::Up)
-    if_pressed!(pad_data, button::PSP_CTRL_RIGHT, Button::Right)
-    if_pressed!(pad_data, button::PSP_CTRL_DOWN, Button::Down)
-    if_pressed!(pad_data, button::PSP_CTRL_LEFT, Button::Left)
-    if_pressed!(pad_data, button::PSP_CTRL_LTRIGGER, Button::LTrigger)
-    if_pressed!(pad_data, button::PSP_CTRL_RTRIGGER, Button::RTrigger)
-    if_pressed!(pad_data, button::PSP_CTRL_TRIANGLE, Button::Triangle)
-    if_pressed!(pad_data, button::PSP_CTRL_CIRCLE, Button::Circle)
-    if_pressed!(pad_data, button::PSP_CTRL_CROSS, Button::Cross)
-    if_pressed!(pad_data, button::PSP_CTRL_SQUARE, Button::Square)
-    if_pressed!(pad_data, button::PSP_CTRL_HOME, Button::Home)
-    if_pressed!(pad_data, button::PSP_CTRL_HOLD, Button::Hold)
-    if_pressed!(pad_data, button::PSP_CTRL_NOTE, Button::Note)
-    if_pressed!(pad_data, button::PSP_CTRL_SCREEN, Button::Screen)
-    if_pressed!(pad_data, button::PSP_CTRL_VOLUP, Button::Volup)
-    if_pressed!(pad_data, button::PSP_CTRL_VOLDOWN, Button::Voldown)
-    if_pressed!(pad_data, button::PSP_CTRL_WLAN_UP, Button::WlanUp)
-    if_pressed!(pad_data, button::PSP_CTRL_REMOTE, Button::Remote)
-    if_pressed!(pad_data, button::PSP_CTRL_DISC, Button::Disc)
-    if_pressed!(pad_data, button::PSP_CTRL_MS, Button::Ms)
-
-    Button::None
-}
-
 pub struct Input {
     ctrl_data: SceCtrlData
 }
 
 impl Input {
+    /// Create a new instance, wrapping the low-level SceCtrlData
     pub fn new() -> Input {
         Input {
             ctrl_data: SceCtrlData::new()
         }
     }
 
+    /// Read new input data into the contained SceCtrlData
     pub fn read(&mut self) {
         unsafe { sceCtrlPeekBufferPositive(&mut self.ctrl_data, 1); }
     }
 
+    /// Read new input data
+    /// and determine if input changed compared to the last read
     pub fn read_changed(&mut self) -> bool {
         let old_buttons = self.ctrl_data.buttons;
         self.read();
         old_buttons == self.ctrl_data.buttons
     }
 
+    /// Return the key that was pressed.
+    ///
+    /// Does not handle multiple keys pressed at once.
     pub fn pressed_key(&mut self) -> Button {
         if_pressed!(self.ctrl_data, button::PSP_CTRL_START, Button::Start);
         if_pressed!(self.ctrl_data, button::PSP_CTRL_UP, Button::Up);
