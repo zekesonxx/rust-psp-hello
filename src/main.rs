@@ -23,18 +23,13 @@ pub extern "C" fn main() {
     utils::debug_init();
     utils::debug_print("Hello World! from Rust with love <3\n");
 
-    let mut pad_data = ctrl::SceCtrlData::new();
-    let mut last_pad : u32 = 0;
+    let mut pad_data = ctrl::Input::new();
 
     loop {
         //display::wait_vblank_start();
 
-        ctrl::read(&mut pad_data);
-
-        if last_pad != pad_data.buttons {
-            last_pad = pad_data.buttons;
-
-            match ctrl::pressed_key(&mut pad_data) {
+        if pad_data.read_changed() {
+            match pad_data.pressed_key() {
                 Button::Cross => utils::debug_print("X pressed\n"),
                 Button::Circle => utils::debug_print("O pressed\n"),
                 Button::Triangle => utils::debug_print("TRIANGLE pressed\n"),

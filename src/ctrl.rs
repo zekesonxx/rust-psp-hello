@@ -103,11 +103,6 @@ extern {
     fn sceCtrlReadLatch(latch_data: &mut SceCtrlLatch) -> c_int;
 }
 
-pub fn read(pad_data: &mut SceCtrlData) -> u32 {
-    unsafe { sceCtrlPeekBufferPositive(pad_data, 1) as u32 }
-}
-
-//
 // let pdata = SceCtrlData { ... }
 // let pad = ctrl::read(&pad_data);
 // if button_pressed(pad, button::PSP_CTRL_UP) {
@@ -117,7 +112,7 @@ pub fn button_pressed(pad_data: &SceCtrlData, but: u32) -> bool {
 }
 
 macro_rules! if_pressed(
-    ($pad:ident, $button:expr, $name:expr) => (
+    ($pad:expr, $button:expr, $name:expr) => (
         if ($pad.buttons & $button) == $button {
             return $name
         }
@@ -149,3 +144,52 @@ pub fn pressed_key(pad_data: &SceCtrlData) -> Button {
 
     Button::None
 }
+
+pub struct Input {
+    ctrl_data: SceCtrlData
+}
+
+impl Input {
+    pub fn new() -> Input {
+        Input {
+            ctrl_data: SceCtrlData::new()
+        }
+    }
+
+    pub fn read(&mut self) {
+        unsafe { sceCtrlPeekBufferPositive(&mut self.ctrl_data, 1); }
+    }
+
+    pub fn read_changed(&mut self) -> bool {
+        let old_buttons = self.ctrl_data.buttons;
+        self.read();
+        old_buttons == self.ctrl_data.buttons
+    }
+
+    pub fn pressed_key(&mut self) -> Button {
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_START, Button::Start);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_UP, Button::Up);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_RIGHT, Button::Right);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_DOWN, Button::Down);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_LEFT, Button::Left);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_LTRIGGER, Button::LTrigger);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_RTRIGGER, Button::RTrigger);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_TRIANGLE, Button::Triangle);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_CIRCLE, Button::Circle);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_CROSS, Button::Cross);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_SQUARE, Button::Square);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_HOME, Button::Home);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_HOLD, Button::Hold);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_NOTE, Button::Note);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_SCREEN, Button::Screen);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_VOLUP, Button::Volup);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_VOLDOWN, Button::Voldown);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_WLAN_UP, Button::WlanUp);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_REMOTE, Button::Remote);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_DISC, Button::Disc);
+        if_pressed!(self.ctrl_data, button::PSP_CTRL_MS, Button::Ms);
+
+        Button::None
+    }
+}
+
