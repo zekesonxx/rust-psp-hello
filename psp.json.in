@@ -17,14 +17,16 @@
     "relocation-model": "static",
     "linker-is-gnu": true,
     "linker-flavor": "gcc",
-    "pre-link-args": [
-        "-mno-abicalls",
-        "-mabi=eabi",
-        "-fPIC",
-        "-L$PSPSDK_LIBPATH",
-        "-specs=$PSPSDK_LIBPATH/prxspecs",
-        "-Wl,-q,-T$PSPSDK_LIBPATH/linkfile.prx",
-        "$PSPSDK_LIBPATH/prxexports.o",
-        "src/module.s"
-    ]
+    "pre-link-args": {
+        "gcc": [
+            "-mno-abicalls",
+            "-mabi=eabi",
+            "-fPIC",
+            "-L$PSPSDK_LIBPATH",
+            "-specs=$PSPSDK_LIBPATH/prxspecs",
+            "-Wl,-q,-T$PSPSDK_LIBPATH/linkfile.prx",
+            "$PSPSDK_LIBPATH/prxexports.o",
+            "src/module.s"
+        ]
+    }
 }

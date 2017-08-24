@@ -17,6 +17,9 @@ pub enum Mode {
     KERNEL = 1,
 }
 
+// yeah whatevs
+unsafe impl ::core::marker::Sync for SceModuleInfo {}
+
 // XXX - Find a way to also accept a name
 macro_rules! PSP_MODULE_INFO (
     ($mode:expr, $major_version:expr, $minor_version:expr) => (

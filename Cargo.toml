@@ -1,5 +1,10 @@
 [package]
-
+authors = ["Luqman Aden <me@luqman.ca>"]
 name = "psp-hello"
 version = "0.1.0"
-authors = ["Luqman Aden <me@luqman.ca>"]
+
+[dependencies]
+#libc = { version = "0.2", default-features = false }
+
+[profile.debug]
+panic = "abort"
