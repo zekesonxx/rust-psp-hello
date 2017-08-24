@@ -1,13 +1,14 @@
 #![no_std]
 #![no_main]
-#![feature(intrinsics, lang_items, linkage, macro_rules)]
+#![no_core]
+#![feature(intrinsics, lang_items, linkage, macro_rules, no_core, improper_ctypes)]
 #![allow(dead_code)]
 
 use ctrl::Button;
 
 mod libc;
 mod lang;
-#[macro_escape]
+#[macro_use]
 mod raw;
 mod utils;
 mod display;
@@ -16,7 +17,7 @@ mod ctrl;
 const VERSION_MAJOR: u8 = 0;
 const VERSION_MINOR: u8 = 1;
 
-PSP_MODULE_INFO!(raw::Mode::USER, VERSION_MAJOR, VERSION_MINOR)
+PSP_MODULE_INFO!(raw::Mode::USER, VERSION_MAJOR, VERSION_MINOR);
 
 #[no_mangle]
 pub extern "C" fn main() {

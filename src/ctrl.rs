@@ -6,7 +6,7 @@ pub struct SceCtrlData {
     pub buttons: u32,
     lx: u8,
     ly: u8,
-    rsrv: [u8, ..6]
+    rsrv: [u8; 6]
 }
 
 impl SceCtrlData {
@@ -16,7 +16,7 @@ impl SceCtrlData {
             buttons: 0,
             lx: 0,
             ly: 0,
-            rsrv: [0, ..6]
+            rsrv: [0; 6]
         }
     }
 }
@@ -117,7 +117,7 @@ macro_rules! if_pressed(
             return $name
         }
     )
-)
+);
 
 pub struct Input {
     ctrl_data: SceCtrlData
